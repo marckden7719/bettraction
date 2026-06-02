@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VaultRouteImport } from './routes/vault'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as LeaderboardRouteImport } from './routes/leaderboard'
 import { Route as ExploreRouteImport } from './routes/explore'
 import { Route as DocsRouteImport } from './routes/docs'
@@ -20,6 +21,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const VaultRoute = VaultRouteImport.update({
   id: '/vault',
   path: '/vault',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LeaderboardRoute = LeaderboardRouteImport.update({
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/docs': typeof DocsRoute
   '/explore': typeof ExploreRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/vault': typeof VaultRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/docs': typeof DocsRoute
   '/explore': typeof ExploreRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/vault': typeof VaultRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/docs': typeof DocsRoute
   '/explore': typeof ExploreRoute
   '/leaderboard': typeof LeaderboardRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/vault': typeof VaultRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/explore'
     | '/leaderboard'
+    | '/sitemap.xml'
     | '/vault'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/explore'
     | '/leaderboard'
+    | '/sitemap.xml'
     | '/vault'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/docs'
     | '/explore'
     | '/leaderboard'
+    | '/sitemap.xml'
     | '/vault'
   fileRoutesById: FileRoutesById
 }
@@ -118,6 +130,7 @@ export interface RootRouteChildren {
   DocsRoute: typeof DocsRoute
   ExploreRoute: typeof ExploreRoute
   LeaderboardRoute: typeof LeaderboardRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   VaultRoute: typeof VaultRoute
 }
 
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/vault'
       fullPath: '/vault'
       preLoaderRoute: typeof VaultRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/leaderboard': {
@@ -182,8 +202,19 @@ const rootRouteChildren: RootRouteChildren = {
   DocsRoute: DocsRoute,
   ExploreRoute: ExploreRoute,
   LeaderboardRoute: LeaderboardRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   VaultRoute: VaultRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
