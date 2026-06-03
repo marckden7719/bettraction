@@ -18,9 +18,9 @@ import process from "node:process";
 
 export function getServerConfig() {
   return {
-    nodeEnv: process.env.NODE_ENV,
-    // Add server-only values here, e.g.:
-    //   databaseUrl: process.env.DATABASE_URL,
-    //   stripeSecretKey: process.env.STRIPE_SECRET_KEY,
+    nodeEnv: process.env.NODE_ENV || "development",
+    jwtSecret: process.env.JWT_SECRET || "dev-secret-key-change-in-production",
+    vaultAddress: "0xc1A020BE6548D70319a31060E32f1E2A8Cf8d930",
+    baseRpcUrl: process.env.BASE_RPC_URL || "https://mainnet.base.org",
   };
 }

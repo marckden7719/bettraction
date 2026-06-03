@@ -1,9 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, Wallet, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ConnectWallet } from "./ConnectWallet";
 
 const links = [
   { to: "/", label: "Home" },
@@ -39,10 +40,7 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button className="hidden bg-gradient-primary text-primary-foreground shadow-elegant hover:opacity-95 md:inline-flex">
-            <Wallet className="mr-2 h-4 w-4" />
-            Connect Wallet
-          </Button>
+          <ConnectWallet />
           <button
             aria-label="Menu"
             className="rounded-md p-2 text-foreground md:hidden"
@@ -69,9 +67,9 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
-            <Button className="mt-2 w-full bg-gradient-primary text-primary-foreground">
-              <Wallet className="mr-2 h-4 w-4" /> Connect Wallet
-            </Button>
+            <div className="mt-2">
+              <ConnectWallet />
+            </div>
           </div>
         </div>
       )}
